@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const INSTAGRAM_URL = "https://www.instagram.com/haythemphotography/";
 const WHATSAPP_URL = "https://wa.me/21696250505";
 const PHONE = "+216 96 250 505";
+const EMAIL = "haythemessayem@gmail.com";
+const FACEBOOK_URL = "https://www.facebook.com/haythem.essayem?locale=fr_FR";
 
 export default function Home() {
+  const { t, isRTL } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
@@ -17,39 +22,42 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0d0d0d] text-white font-sans overflow-x-hidden">
+    <div className={`min-h-screen bg-[#0d0d0d] text-white font-sans overflow-x-hidden ${isRTL ? "text-right" : "text-left"}`}>
 
       {/* NAV */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 mix-blend-normal">
         <motion.span
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-xl font-light tracking-[0.25em] uppercase text-white drop-shadow-lg"
         >
-          Haythem
+          {t("hero.title")}
         </motion.span>
         <motion.div
-          initial={{ opacity: 0, x: 20 }}
+          initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="flex items-center gap-6"
         >
-          <a
-            href={INSTAGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-2 text-sm tracking-widest uppercase text-white/70 hover:text-white transition-colors duration-300"
-          >
-            <InstagramIcon className="w-5 h-5" />
-          </a>
+          <div className="flex items-center gap-4">
+             <LanguageSwitcher />
+             <a
+               href={INSTAGRAM_URL}
+               target="_blank"
+               rel="noopener noreferrer"
+               className="group flex items-center gap-2 text-sm tracking-widest uppercase text-white/70 hover:text-white transition-colors duration-300"
+             >
+               <InstagramIcon className="w-5 h-5" />
+             </a>
+          </div>
           <a
             href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline-block text-sm tracking-widest uppercase text-white/70 hover:text-white transition-colors duration-300"
           >
-            Contact
+            {t("nav.contact")}
           </a>
         </motion.div>
       </nav>
@@ -61,7 +69,7 @@ export default function Home() {
           className="absolute inset-0 z-0"
         >
           <img
-            src="/haythem-bg.jpeg"
+            src="/haythem.jpeg"
             alt="Haythem Photography"
             className="w-full h-full object-cover object-center scale-110"
           />
@@ -76,16 +84,16 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.6 }}
             className="text-xs sm:text-sm tracking-[0.4em] uppercase text-amber-300/80 mb-4 font-light"
           >
-            Through the Lens
+            {t("hero.subtitle")}
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.1, delay: 0.8 }}
-            className="text-6xl sm:text-8xl md:text-9xl font-thin tracking-tight text-white leading-none mb-6"
-            style={{ fontFamily: "'Georgia', serif", letterSpacing: "-0.02em" }}
+            className={`text-6xl sm:text-8xl md:text-9xl font-thin tracking-tight text-white leading-none mb-6 ${isRTL ? "font-arabic" : ""}`}
+            style={{ fontFamily: isRTL ? "inherit" : "'Georgia', serif", letterSpacing: "-0.02em" }}
           >
-            Haythem
+            {t("hero.title")}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -93,7 +101,7 @@ export default function Home() {
             transition={{ duration: 1, delay: 1.1 }}
             className="text-base sm:text-lg font-light tracking-[0.15em] text-white/60 uppercase mb-10"
           >
-            Photography
+            {t("hero.tagline")}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -108,7 +116,7 @@ export default function Home() {
               className="group flex items-center gap-3 px-8 py-3.5 border border-white/30 hover:border-amber-300/60 text-white/80 hover:text-white text-sm tracking-widest uppercase transition-all duration-400 backdrop-blur-sm hover:bg-white/5"
             >
               <InstagramIcon className="w-4 h-4 text-amber-300 group-hover:scale-110 transition-transform" />
-              Follow on Instagram
+              {t("hero.ctaFollow")}
             </a>
             <a
               href={WHATSAPP_URL}
@@ -117,7 +125,7 @@ export default function Home() {
               className="group flex items-center gap-3 px-8 py-3.5 bg-amber-300/10 border border-amber-300/30 hover:border-amber-300/70 hover:bg-amber-300/20 text-amber-200 hover:text-amber-100 text-sm tracking-widest uppercase transition-all duration-400 backdrop-blur-sm"
             >
               <WhatsAppIcon className="w-4 h-4 group-hover:scale-110 transition-transform" />
-              Book a Session
+              {t("hero.ctaBook")}
             </a>
           </motion.div>
         </div>
@@ -129,7 +137,7 @@ export default function Home() {
           transition={{ delay: 2.2, duration: 1 }}
           className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/30"
         >
-          <span className="text-xs tracking-[0.3em] uppercase">Scroll</span>
+          <span className="text-xs tracking-[0.3em] uppercase">{t("hero.scroll")}</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
@@ -147,29 +155,53 @@ export default function Home() {
           transition={{ duration: 1, ease: "easeOut" }}
           className="grid md:grid-cols-2 gap-16 items-center"
         >
-          <div>
-            <p className="text-xs tracking-[0.4em] uppercase text-amber-300/70 mb-5">About</p>
-            <h2 className="text-4xl sm:text-5xl font-thin mb-8 leading-tight" style={{ fontFamily: "'Georgia', serif" }}>
-              Capturing moments<br />
-              <span className="text-amber-200/70">that last forever</span>
+          <div className={isRTL ? "order-1" : "order-none"}>
+            <p className="text-xs tracking-[0.4em] uppercase text-amber-300/70 mb-5">{t("about.title")}</p>
+            <h2 className={`text-4xl sm:text-5xl font-thin mb-8 leading-tight ${isRTL ? "font-arabic" : ""}`} style={{ fontFamily: isRTL ? "inherit" : "'Georgia', serif" }}>
+              {t("about.heading")}<br />
+              <span className="text-amber-200/70">{t("about.headingAccent")}</span>
             </h2>
             <p className="text-white/50 leading-relaxed text-lg font-light mb-6">
-              A passionate photographer dedicated to revealing the beauty in every scene — from golden-hour landscapes to intimate human moments.
+              {t("about.text1")}
             </p>
             <p className="text-white/40 leading-relaxed font-light">
-              Each frame is crafted with intention, patience, and an eye for the extraordinary hidden within the ordinary.
+              {t("about.text2")}
             </p>
           </div>
           <div className="relative">
             <div className="absolute -inset-4 border border-amber-300/10 -rotate-2" />
             <div className="absolute -inset-4 border border-white/5 rotate-1" />
             <img
-              src="/haythem-bg.jpeg"
+              src="/mamma-alik.jpeg"
               alt="Haythem at work"
               className="relative w-full aspect-[3/4] object-cover object-top grayscale hover:grayscale-0 transition-all duration-700"
             />
           </div>
         </motion.div>
+      </section>
+
+      {/* REELS */}
+      <section className="py-24 bg-white/[0.02]">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <p className="text-xs tracking-[0.4em] uppercase text-amber-300/70 mb-4">{t("reels.subtitle")}</p>
+            <h2 className={`text-4xl sm:text-5xl font-thin ${isRTL ? "font-arabic" : ""}`} style={{ fontFamily: isRTL ? "inherit" : "'Georgia', serif" }}>
+              {t("reels.title")}
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 justify-items-center">
+             <InstagramReel id="DUvz0jHiHUt" index={0} />
+             <InstagramReel id="C2AjD30IGo6" index={1} isMiddle />
+             <InstagramReel id="DPeiEoziFuJ" index={2} />
+          </div>
+        </div>
       </section>
 
       {/* SERVICES */}
@@ -182,13 +214,13 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-center mb-20"
           >
-            <p className="text-xs tracking-[0.4em] uppercase text-amber-300/70 mb-4">Services</p>
-            <h2 className="text-4xl sm:text-5xl font-thin" style={{ fontFamily: "'Georgia', serif" }}>
-              What I Offer
+            <p className="text-xs tracking-[0.4em] uppercase text-amber-300/70 mb-4">{t("services.title")}</p>
+            <h2 className={`text-4xl sm:text-5xl font-thin ${isRTL ? "font-arabic" : ""}`} style={{ fontFamily: isRTL ? "inherit" : "'Georgia', serif" }}>
+              {t("services.heading")}
             </h2>
           </motion.div>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-px bg-white/5">
-            {services.map((svc, i) => (
+            {(t("services.items") as any[]).map((svc, i) => (
               <motion.div
                 key={svc.title}
                 initial={{ opacity: 0, y: 30 }}
@@ -197,7 +229,7 @@ export default function Home() {
                 transition={{ duration: 0.7, delay: i * 0.1 }}
                 className="bg-[#0d0d0d] p-10 group hover:bg-[#141414] transition-colors duration-300"
               >
-                <div className="text-amber-300/60 mb-6 text-3xl">{svc.icon}</div>
+                <div className="text-amber-300/60 mb-6 text-3xl">{servicesIcons[i]}</div>
                 <h3 className="text-lg font-light tracking-wider mb-3 text-white/90">{svc.title}</h3>
                 <p className="text-white/35 text-sm leading-relaxed font-light">{svc.desc}</p>
               </motion.div>
@@ -215,13 +247,13 @@ export default function Home() {
           transition={{ duration: 1 }}
           className="max-w-3xl mx-auto text-center"
         >
-          <p className="text-xs tracking-[0.4em] uppercase text-amber-300/70 mb-5">Get in Touch</p>
-          <h2 className="text-4xl sm:text-6xl font-thin mb-6 leading-tight" style={{ fontFamily: "'Georgia', serif" }}>
-            Let's Create<br />
-            <span className="text-white/40">Something Beautiful</span>
+          <p className="text-xs tracking-[0.4em] uppercase text-amber-300/70 mb-5">{t("contact.title")}</p>
+          <h2 className={`text-4xl sm:text-6xl font-thin mb-6 leading-tight ${isRTL ? "font-arabic" : ""}`} style={{ fontFamily: isRTL ? "inherit" : "'Georgia', serif" }}>
+            {t("contact.heading")}<br />
+            <span className="text-white/40">{t("contact.headingAccent")}</span>
           </h2>
           <p className="text-white/40 mb-12 font-light text-lg leading-relaxed">
-            Available for portrait sessions, events, landscapes, and commercial projects across Tunisia and beyond.
+            {t("contact.text")}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
@@ -232,7 +264,7 @@ export default function Home() {
               className="group flex items-center justify-center gap-3 px-10 py-4 bg-amber-300 hover:bg-amber-200 text-[#0d0d0d] text-sm font-medium tracking-widest uppercase transition-all duration-300"
             >
               <WhatsAppIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              WhatsApp Me
+              {t("contact.ctaWhatsapp")}
             </a>
             <a
               href={INSTAGRAM_URL}
@@ -241,19 +273,38 @@ export default function Home() {
               className="group flex items-center justify-center gap-3 px-10 py-4 border border-white/20 hover:border-white/50 text-white/70 hover:text-white text-sm tracking-widest uppercase transition-all duration-300"
             >
               <InstagramIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
-              Instagram
+              {t("contact.ctaInstagram")}
+            </a>
+            <a
+              href={FACEBOOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-center gap-3 px-10 py-4 border border-white/20 hover:border-white/50 text-white/70 hover:text-white text-sm tracking-widest uppercase transition-all duration-300"
+            >
+              <FacebookIcon className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              Facebook
             </a>
           </div>
 
-          <div className="border-t border-white/5 pt-10 flex flex-col sm:flex-row gap-4 justify-center items-center text-white/30 text-sm">
+          <div className={`border-t border-white/5 pt-10 flex flex-wrap gap-x-10 gap-y-6 justify-center items-center text-white/30 text-sm ${isRTL ? "flex-row-reverse" : ""}`}>
             <a href={`tel:${PHONE.replace(/\s/g, "")}`} className="flex items-center gap-2 hover:text-amber-300/70 transition-colors">
               <PhoneIcon className="w-4 h-4" />
               {PHONE}
             </a>
             <span className="hidden sm:inline text-white/10">|</span>
+            <a href={`mailto:${EMAIL}`} className="flex items-center gap-2 hover:text-amber-300/70 transition-colors">
+              <MailIcon className="w-4 h-4" />
+              {EMAIL}
+            </a>
+            <span className="hidden sm:inline text-white/10">|</span>
             <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-amber-300/70 transition-colors">
               <InstagramIcon className="w-4 h-4" />
-              @haythemphotography
+              Instagram
+            </a>
+            <span className="hidden sm:inline text-white/10">|</span>
+            <a href={FACEBOOK_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-amber-300/70 transition-colors">
+              <FacebookIcon className="w-4 h-4" />
+              Facebook
             </a>
           </div>
         </motion.div>
@@ -261,44 +312,13 @@ export default function Home() {
 
       {/* FOOTER */}
       <footer className="border-t border-white/5 py-10 px-6 text-center text-white/20 text-xs tracking-widest uppercase">
-        <p>&copy; {new Date().getFullYear()} Haythem Photography — All rights reserved</p>
+        <p>&copy; {new Date().getFullYear()} {t("hero.title")} {t("hero.tagline")} — {t("footer.rights")}</p>
       </footer>
     </div>
   );
 }
 
-const services = [
-  {
-    icon: "◆",
-    title: "Portrait Sessions",
-    desc: "Intimate one-on-one sessions capturing your authentic self in natural or studio settings.",
-  },
-  {
-    icon: "◇",
-    title: "Landscape & Nature",
-    desc: "Breathtaking scenery and golden-hour magic — the world through a patient, artistic eye.",
-  },
-  {
-    icon: "○",
-    title: "Events",
-    desc: "Weddings, celebrations, and gatherings preserved in timeless, documentary-style imagery.",
-  },
-  {
-    icon: "□",
-    title: "Commercial",
-    desc: "Brand and product photography that tells your story with elegance and precision.",
-  },
-  {
-    icon: "△",
-    title: "Fine Art Prints",
-    desc: "Gallery-quality prints of selected works, available for your home or office.",
-  },
-  {
-    icon: "✕",
-    title: "Custom Projects",
-    desc: "Have a unique vision? Let's collaborate and bring your idea to life.",
-  },
-];
+const servicesIcons = ["◆", "◇", "○", "□", "△", "✕"];
 
 function InstagramIcon({ className }: { className?: string }) {
   return (
@@ -318,10 +338,82 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+    </svg>
+  );
+}
+
+
 function PhoneIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.82a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 8a16 16 0 006.9 6.9l1.15-1.16a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z" />
+    </svg>
+  );
+}
+
+function MailIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+      <polyline points="22,6 12,13 2,6" />
+    </svg>
+  );
+}
+
+
+function InstagramReel({ id, index, isMiddle }: { id: string; index: number; isMiddle?: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8, delay: index * 0.15 }}
+      className="flex flex-col items-center gap-4 w-full"
+    >
+      <div 
+        className={`relative w-full max-w-[320px] aspect-[9/12.8] bg-[#0d0d0d] rounded-2xl overflow-hidden border shadow-2xl transition-all duration-500 hover:shadow-amber-300/10 ${
+          isMiddle ? "border-amber-300/30 scale-105 z-10" : "border-white/5"
+        }`}
+      >
+        {/* The "Safe Crop" Wrapper */}
+        <div className="absolute inset-x-0 top-[-44px] h-[calc(100%+120px)] w-full">
+          <iframe
+            src={`https://www.instagram.com/reel/${id}/embed`}
+            className="w-full h-full border-none z-0"
+            allowFullScreen
+            scrolling="no"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+          ></iframe>
+        </div>
+        
+        {/* Top/Bottom masks to blend with background if any sliver of white shows */}
+        <div className="absolute inset-x-0 top-0 h-4 bg-gradient-to-b from-[#0d0d0d] to-transparent pointer-events-none z-10" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/40 to-transparent pointer-events-none z-10" />
+      </div>
+
+      <a
+        href={`https://www.instagram.com/reel/${id}/`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex items-center gap-2 px-6 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-amber-300/10 hover:border-amber-300/40 transition-all duration-300"
+      >
+        <span className="text-[10px] tracking-[0.2em] uppercase text-white/50 group-hover:text-amber-200">View on Instagram</span>
+        <ExternalLinkIcon className="w-3.5 h-3.5 text-white/30 group-hover:text-amber-200" />
+      </a>
+    </motion.div>
+  );
+}
+
+function ExternalLinkIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+      <polyline points="15 3 21 3 21 9" />
+      <line x1="10" y1="14" x2="21" y2="3" />
     </svg>
   );
 }

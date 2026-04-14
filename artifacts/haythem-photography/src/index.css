@@ -235,4 +235,18 @@
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
   }
+
+  .font-arabic {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+  }
 }
+
+[dir="rtl"] .tracking-\[0\.25em\] {
+  letter-spacing: normal;
+}
+
+[dir="rtl"] .tracking-\[0\.4em\] {
+  letter-spacing: normal;
+}
+
