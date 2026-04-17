@@ -24,6 +24,10 @@ export const translations = {
       title: "Featured Reels",
       subtitle: "Recent Work",
     },
+    gallery: {
+      title: "Selected Works",
+      subtitle: "Portfolio",
+    },
     services: {
       title: "Services",
       heading: "What I Offer",
@@ -71,6 +75,10 @@ export const translations = {
       title: "Réels Vedettes",
       subtitle: "Travaux Récents",
     },
+    gallery: {
+      title: "Œuvres Sélectionnées",
+      subtitle: "Portfolio",
+    },
     services: {
       title: "Services",
       heading: "Ce que je propose",
@@ -117,6 +125,10 @@ export const translations = {
     reels: {
       title: "أهم الفيديوهات",
       subtitle: "آخر الأعمال",
+    },
+    gallery: {
+      title: "أعمال مختارة",
+      subtitle: "معرض الصور",
     },
     services: {
       title: "خدماتنا",

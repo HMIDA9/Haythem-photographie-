@@ -180,6 +180,45 @@ export default function Home() {
         </motion.div>
       </section>
 
+      {/* GALLERY */}
+      <section className="py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <p className="text-xs tracking-[0.4em] uppercase text-amber-300/70 mb-4">{t("gallery.subtitle")}</p>
+            <h2 className={`text-4xl sm:text-5xl font-thin ${isRTL ? "font-arabic" : ""}`} style={{ fontFamily: isRTL ? "inherit" : "'Georgia', serif" }}>
+              {t("gallery.title")}
+            </h2>
+          </motion.div>
+          
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+            {galleryImages.map((src, i) => (
+              <motion.div
+                key={src}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "100px" }}
+                transition={{ duration: 0.7, delay: (i % 3) * 0.1 }}
+                className="relative group break-inside-avoid overflow-hidden bg-[#1a1a1a]"
+              >
+                <img
+                  src={`/gallery/${src}`}
+                  alt={`Portfolio ${i + 1}`}
+                  loading="lazy"
+                  className="w-full h-auto object-cover transform transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* REELS */}
       <section className="py-24 bg-white/[0.02]">
         <div className="max-w-7xl mx-auto px-6">
@@ -198,7 +237,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 justify-items-center">
              <InstagramReel id="DUvz0jHiHUt" index={0} />
-             <InstagramReel id="C2AjD30IGo6" index={1} isMiddle />
+             <InstagramReel id="DRzoYTZiHMt" index={1} isMiddle />
              <InstagramReel id="DPeiEoziFuJ" index={2} />
           </div>
         </div>
@@ -417,3 +456,18 @@ function ExternalLinkIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+const galleryImages = [
+  "0A90315D-9925-45B0-8E11-BE6062911B41.jpeg",
+  "F08BDC74-791F-46B8-97D5-EC5DFC8CC6F3.jpeg",
+  "IMG_0015.jpeg", "IMG_0017.jpeg", "IMG_0020.jpeg", "IMG_0022.jpeg",
+  "IMG_0026.jpeg", "IMG_0031.jpeg", "IMG_0033.jpeg", "IMG_0038.jpeg",
+  "IMG_0039.jpeg", "IMG_0042.jpeg", "IMG_0044.jpeg", "IMG_0045.jpeg",
+  "IMG_0047.jpeg", "IMG_0391.jpeg", "IMG_0392.jpeg", "IMG_0393.jpeg",
+  "IMG_3554.jpeg", "IMG_3555.jpeg", "IMG_3595.jpeg", "IMG_4315.jpeg",
+  "IMG_4317.jpeg", "IMG_4321.jpeg", "IMG_5003.jpeg", "IMG_5005.jpeg",
+  "IMG_5007.jpeg", "IMG_5331.jpeg", "IMG_5337.jpeg", "IMG_5338.jpeg",
+  "IMG_5340.jpeg", "IMG_5594.jpeg", "IMG_5596.jpeg", "IMG_6460.jpeg",
+  "IMG_6462.jpeg", "IMG_6464.jpeg", "IMG_6466.jpeg", "IMG_6468.jpeg"
+];
+
