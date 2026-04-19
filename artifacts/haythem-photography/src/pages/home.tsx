@@ -8,11 +8,18 @@ const WHATSAPP_URL = "https://wa.me/21696250505";
 const PHONE = "+216 96 250 505";
 const EMAIL = "haythemessayem@gmail.com";
 const FACEBOOK_URL = "https://www.facebook.com/haythem.essayem?locale=fr_FR";
+const LOCATION_URL = "https://www.google.com/maps/@/data=!4m5!7m4!1m2!1s117026761755799797762!2sChY3MllYalpHMUVkYTlrSnRrdm5STnB3EggHBk-o51LTHQ%3D%3D!2e2?hl=en";
 
 export default function Home() {
   const { t, isRTL } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [galleryPage, setGalleryPage] = useState(1);
+  
+  const IMAGES_PER_PAGE = 9;
+  const totalGalleryPages = Math.ceil(galleryImages.length / IMAGES_PER_PAGE);
+  const currentGalleryImages = galleryImages.slice((galleryPage - 1) * IMAGES_PER_PAGE, galleryPage * IMAGES_PER_PAGE);
   const heroRef = useRef<HTMLDivElement>(null);
+  const galleryRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const bgY = useTransform(scrollY, [0, 600], ["0%", "30%"]);
   const bgOpacity = useTransform(scrollY, [0, 400], [1, 0.4]);
@@ -26,14 +33,18 @@ export default function Home() {
 
       {/* NAV */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-5 mix-blend-normal">
-        <motion.span
+        <motion.div
           initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-xl font-light tracking-[0.25em] uppercase text-white drop-shadow-lg"
+          className="flex items-center gap-4 drop-shadow-lg cursor-pointer"
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
-          {t("hero.title")}
-        </motion.span>
+          <img src="/logohaythem.png" alt="Logo" className="h-16 sm:h-20 md:h-24 w-auto object-contain scale-110 origin-left" />
+          <span className="hidden sm:inline-block text-xl font-light tracking-[0.25em] uppercase text-white">
+            {t("hero.title")}
+          </span>
+        </motion.div>
         <motion.div
           initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -181,7 +192,7 @@ export default function Home() {
       </section>
 
       {/* GALLERY */}
-      <section className="py-24 px-6">
+      <section ref={galleryRef} className="py-24 px-6 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -197,13 +208,13 @@ export default function Home() {
           </motion.div>
           
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
-            {galleryImages.map((src, i) => (
+            {currentGalleryImages.map((src, i) => (
               <motion.div
                 key={src}
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "100px" }}
-                transition={{ duration: 0.7, delay: (i % 3) * 0.1 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
+                layout
                 className="relative group break-inside-avoid overflow-hidden bg-[#1a1a1a]"
               >
                 <img
@@ -216,6 +227,38 @@ export default function Home() {
               </motion.div>
             ))}
           </div>
+
+          {totalGalleryPages > 1 && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex justify-center items-center gap-6 mt-16"
+            >
+              <button 
+                onClick={() => {
+                  setGalleryPage(p => Math.max(1, p - 1));
+                  setTimeout(() => galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+                }}
+                disabled={galleryPage === 1}
+                className="px-6 py-2 border border-white/10 hover:border-amber-300/40 disabled:opacity-30 disabled:hover:border-white/10 text-xs tracking-widest uppercase transition-all duration-300 hover:text-amber-200"
+              >
+                {t("gallery.prev") || "Prev"}
+              </button>
+              <span className="text-white/40 text-sm tracking-widest font-light">
+                {galleryPage} / {totalGalleryPages}
+              </span>
+              <button 
+                onClick={() => {
+                  setGalleryPage(p => Math.min(totalGalleryPages, p + 1));
+                  setTimeout(() => galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+                }}
+                disabled={galleryPage === totalGalleryPages}
+                className="px-6 py-2 border border-white/10 hover:border-amber-300/40 disabled:opacity-30 disabled:hover:border-white/10 text-xs tracking-widest uppercase transition-all duration-300 hover:text-amber-200"
+              >
+                {t("gallery.next") || "Next"}
+              </button>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -345,6 +388,11 @@ export default function Home() {
               <FacebookIcon className="w-4 h-4" />
               Facebook
             </a>
+            <span className="hidden sm:inline text-white/10">|</span>
+            <a href={LOCATION_URL} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-amber-300/70 transition-colors">
+              <MapPinIcon className="w-4 h-4" />
+              Location
+            </a>
           </div>
         </motion.div>
       </section>
@@ -399,6 +447,15 @@ function MailIcon({ className }: { className?: string }) {
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
       <polyline points="22,6 12,13 2,6" />
+    </svg>
+  );
+}
+
+function MapPinIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+      <circle cx="12" cy="10" r="3" />
     </svg>
   );
 }
